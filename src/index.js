@@ -17,7 +17,9 @@ export const args = minimist(process.argv.slice(2))
 const sequence = args._
 const found = []
 let commands = {}
-const availableFlags = []
+const availableFlags = [
+    ['-h, --help', 'Display the help listing for the current command level']
+]
 const usedOptions = []
 let helpText = 'Simple-cli help text\n'
 
@@ -62,7 +64,7 @@ export const option = option => {
     return null
 }
 
-export const getUnusedOptions = () => {
+export const getUnusedArgs = () => {
     return _.filter(process.argv.slice(2), argument => {
         const option = argument.substring(2)
         const flag = argument.substring(1)
@@ -131,8 +133,6 @@ export const help = () => {
     if (availableFlags.length && !found.length) {
         console.log('\nAvailable flags:')
         logger(['', ''])(...availableFlags)
-    } else {
-        console.log('')
     }
 }
 
@@ -166,7 +166,8 @@ const nextCommand = (commands, index = 0) => {
             }
 
             return {
-                action: command.action.bind(this, sequence[index - 1]),
+                action: command.action,
+                name: sequence[index - 1],
                 next: !_.isEmpty(command.commands) && sequence.length >= index + 1 ? nextCommand(command.commands, index) : null,
                 args
             }
@@ -180,17 +181,22 @@ export const init = () => {
     let chain;
     try {
         chain = nextCommand(commands)
+        let diff = _.difference(sequence, found)
 
-        if (_.difference(sequence, found).length) {
-            throw new Error(`Unknown command ${difference[0]}`)
+        if (diff.length) {
+            throw new Error(`Unknown command ${diff[0]}`)
         }
     } catch (e) {
         console.log(`${e}\n\n`)
-        help()
+        return help()
     }
 
     const run = (command, param) => {
-        const res = command.action(param, command.args)
+        const res = command.action({
+            name: command.name,
+            data: param,
+            args: command.args
+        })
         let payload = res,
             action = res
 

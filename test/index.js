@@ -1,9 +1,19 @@
-import { init, define, command, option, getUnusedOptions } from '../src/index'
+import { init, define, command, option, flags } from '../src/index'
 
 define(
-    command('name', 'man', () => {
-        console.log(getUnusedOptions())
-    })
+    command(
+        "say-hello",
+        "This command just says hi",
+        (ok) => {
+            if (option('french')) return "Bonjour!"
+
+            return "Hi!"
+        }
+    )
 )
+
+flags([
+    '--french', 'Say hello in french'
+])
 
 init()
