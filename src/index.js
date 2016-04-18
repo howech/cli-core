@@ -1,6 +1,6 @@
 import minimist from 'minimist'
 import _ from 'lodash'
-import { getLogger as logger } from './utils'
+import { logger } from './utils'
 
 _.extractObject = array => {
     let result = {}
@@ -18,6 +18,7 @@ const sequence = args._
 const found = []
 let commands = {}
 const availableFlags = []
+const usedOptions = []
 let helpText = 'Simple-cli help text\n'
 
 export const command = (name, man, action, ...chained) => {
@@ -45,11 +46,28 @@ export const command = (name, man, action, ...chained) => {
 }
 
 export const option = option => {
-    return _.find(args, (value, key) => key == option)
+    let key = null
+    const found = _.find(args, (value, _key) => {
+        if (_key == option) {
+            key = _key
+            return true
+        }
+        return false
+    })
+    
+    if (found) {
+        usedOptions.push(key)
+        return found
+    }
+    return null
 }
 
 export const getUnusedOptions = () => {
-    return _.filter(process.argv, argument => argument.substring(0, 2) == '--' && !_.find(availableFlags, flag => flag.indexOf(argument) !== -1))
+    return _.filter(process.argv.slice(2), argument => {
+        const option = argument.substring(2)
+        const flag = argument.substring(1)
+        return !_.find(usedOptions, _used => _used == option || _used == flag) && !_.find(found, key => key == argument)
+    })
 }
 
 export const define = (...definitions) => {

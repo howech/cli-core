@@ -1,6 +1,11 @@
 import Table from 'cli-table'
 
-const getLogger = labels => {
+/**
+ * For structuring help menu
+ * @param labels
+ * @returns {function()}
+ */
+const logger = labels => {
     return (...data) => {
         const table = new Table({
             chars: {
@@ -24,9 +29,8 @@ const getLogger = labels => {
             head: labels
         })
 
-
         table.push(...data)
         console.log(table.toString())
     }
 }
-export { getLogger as default, getLogger }
+export { logger as default, logger }
