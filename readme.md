@@ -46,8 +46,10 @@ $ node demo.js say-hello
 $ Hi!
 ```
 
-`$ node demo.js say-hello --french`
-`$ Bonjour!`
+```
+$ node demo.js say-hello --french
+$ Bonjour!
+```
 
 ## API Reference
 
