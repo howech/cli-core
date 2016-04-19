@@ -67,6 +67,7 @@ The name of the command.
 
 + To make a wildcard command, prefix your command name with `:` eg `:name`. A wildcard command should be defined last in sequence.
 + To create command aliases, use a `|` between commands eg: `list|ls`
++ If the command name ends with a `]`, then it will absorb all subsequent command arguments - and pass them as a parameter to `action`
 
 ###### `man` [string]
 

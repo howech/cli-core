@@ -2,9 +2,10 @@ import { init, define, command, option, flags } from '../src/index'
 
 define(
     command(
-        "say-hello",
+        "say-hello]",
         "This command just says hi",
         (ok) => {
+            console.log(ok)
             if (option('french')) return "Bonjour!"
 
             return "Hi!"

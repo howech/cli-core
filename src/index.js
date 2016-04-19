@@ -147,13 +147,17 @@ const nextCommand = (commands, index = 0) => {
             next: null
         }
     } else {
-        const command = _.find(commands, (value, key) => key == sequence[index] || key.substring(0, 1) == ':' || _.find(_.split(key, '|'), key => key == sequence[index]))
+        let name = ''
+        const command = _.find(commands, (value, key) => {
+            const _key = key.replace(']', '')
+            name = key
+            return _key == sequence[index] || _key.substring(0, 1) == ':' || _.find(_.split(_key, '|'), _key => _key == sequence[index])
+        })
 
         if (command) {
             found.push(sequence[index])
             index++
 
-            const name = _.join(_.map(_.pickBy(commands, _command => _command == command), (_command, key) => key))
             const args = []
 
             if (name.indexOf(']') !== -1) {

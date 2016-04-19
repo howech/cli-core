@@ -1,5 +1,5 @@
 import path from 'path'
-import fs from 'fs-extra'
+import fs from 'fs'
 import os from 'os'
 import _ from 'lodash'
 import { execSync } from 'child_process'
@@ -15,7 +15,9 @@ const prompt = (label, opts, cb) => {
     try {
         let insert = 0, savedinsert = 0
         const _path = opts.file || path.join(os.homedir(), '.cli-core/history')
-        fs.ensureFileSync(_path)
+        if (!fs.existsSync(dir.replace('/history', ''))){
+            fs.mkdirSync(dir.replace('/history', ''));
+        }
 
         const data = fs.readFileSync(_path, 'utf8')
         const HIST = (data.split('\n').slice(0, -1)).slice(data.length - 1000, data.length)
