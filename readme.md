@@ -67,7 +67,9 @@ The name of the command.
 
 + To make a wildcard command, prefix your command name with `:` eg `:name`. A wildcard command should be defined last in sequence.
 + To create command aliases, use a `|` between commands eg: `list|ls`
-+ If the command name ends with a `]`, then it will absorb all subsequent command arguments - and pass them as a parameter to `action`
++ If the command name ends with a `]`, then it will absorb all subsequent command arguments - and pass them as a parameter to `action`.
+for example - if a command `absorb]` was defined and was used like so: `cli absorb a b c d` - then the arguments `a b c d` will be passed
+into the absorb commands action.
 
 ###### `man` [string]
 
@@ -100,7 +102,7 @@ Accepts a string `name` and returns that option/flags value or `null` if it was 
 
 Set the description text that appears when running any help commands.
 
-### `help(name)`
+### `help()`
 
 Displays the help listing for available commands and flags
 
