@@ -4,6 +4,22 @@ import os from 'os'
 import _ from 'lodash'
 import { execSync } from 'child_process'
 
+const getLabel = () => {
+    const cwd = process.cwd()
+    const hd = os.homedir()
+    let label = cwd
+    if (cwd.indexOf(hd) > -1) {
+        label = cwd.replace(hd, '')
+        if (label == '') {
+            label = '~/'
+        } else {
+            label = `~${label}`
+        }
+    }
+
+    return label
+}
+
 const prompt = (label, opts, cb) => {
     if (typeof opts === 'function') {
         cb = opts
@@ -12,11 +28,17 @@ const prompt = (label, opts, cb) => {
     cb = cb || function () {
         }
 
+    const _label = label || getLabel()
+
     try {
         let insert = 0, savedinsert = 0
         const _path = opts.file || path.join(os.homedir(), '.cli-core/history')
-        if (!fs.existsSync(dir.replace('/history', ''))){
-            fs.mkdirSync(dir.replace('/history', ''));
+        if (!fs.existsSync(_path.replace('/history', ''))){
+            fs.mkdirSync(_path.replace('/history', ''));
+        }
+
+        if (!fs.existsSync(_path)){
+            fs.writeFileSync(_path);
         }
 
         const data = fs.readFileSync(_path, 'utf8')
@@ -54,19 +76,23 @@ const prompt = (label, opts, cb) => {
                 fs.writeFileSync(_path, `${HIST.join('\n')}\n`);
             }
         }
-        let formattedLabel = `\x1b[1m\x1b[31m(\x1b[32m${label}\x1b[31m)\x1b[0m `
-        let labelLength = label.length + 3
+        let formattedLabel = `\x1b[1m\x1b[31m(\x1b[32m${_label}\x1b[31m)\x1b[0m `
+        let labelLength = _label.length + 3
 
         try {
             const currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString('utf8').replace('\n', '')
-            formattedLabel += `\x1b[1m\x1b[36m${currentBranch}\x1b[0m `
-            labelLength += currentBranch.length + 1
+            if (!label) {
+                formattedLabel += `\x1b[1m\x1b[36m${currentBranch}\x1b[0m `
+                labelLength += currentBranch.length + 1
+            }
 
             try {
                 execSync('[[ -z $(git status -s) ]]')
             } catch (e) {
-                formattedLabel += '\x1b[1m\x1b[33m✗\x1b[0m '
-                labelLength += 2
+                if (!label) {
+                    formattedLabel += '\x1b[1m\x1b[33m✗\x1b[0m '
+                    labelLength += 2
+                }
             }
         } catch (e) {
             // ignore
@@ -174,4 +200,4 @@ const prompt = (label, opts, cb) => {
         return cb(e)
     }
 }
-export { prompt as default, prompt }
+export { prompt as default }

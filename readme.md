@@ -2,6 +2,9 @@
 
 A tool for building very simple cli's
 
+This is the internal core of ambient-cli that I have pulled out into its own library. The reason for writing my own cli instead of using one of the
+many out there like vorpal is that they were either too heavy or too simple for what I wanted - this one is a little in between.
+
 #### Example
 
 `demo.js`
@@ -97,6 +100,16 @@ A sequence of nested commands to be run next
 ### `option(name)`
 
 Accepts a string `name` and returns that option/flags value or `null` if it was not in sequence.
+
+### `prompt(label, cb)`
+
+Start an interactive prompt. It accepts `label` and `cb`. The majority of the code for this feature was take from 
+[prompt-sync](https://github.com/0x00A/prompt-sync) with the history module included.
+
++ `label` The prompt text. If none is provided, will default to `~/cwd` + current git branch and commit status (x or nothing)
++ `cb` Will be called on exit and will provide an error as the first argument if any, and the input form the user as the second argument
+
+if `exit` is written, the prompt will exit without firing the cb
 
 ### `setHelpText(text)`
 

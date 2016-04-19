@@ -1,6 +1,6 @@
 import Table from 'cli-table'
 import Prompt from './prompt'
-import os from 'os'
+import _ from 'lodash'
 
 /**
  * For structuring help menu
@@ -36,24 +36,8 @@ const logger = labels => {
     }
 }
 
-const prompt = (error, success) => {
-    const getLabel = () => {
-        const cwd = process.cwd()
-        const hd = os.homedir()
-        let label = cwd
-        if (cwd.indexOf(hd) > -1) {
-            label = cwd.replace(hd, '')
-            if (label == '') {
-                label = '~/'
-            } else {
-                label = `~${label}`
-            }
-        }
-
-        return label
-    }
-
-    Prompt(getLabel(), (err, result) => {
+const prompt = (label, cb) => {
+    Prompt(label, (err, result) => {
         if (!err) {
             const args = _.split(result, ' ')
             const p = args[0]
@@ -64,9 +48,9 @@ const prompt = (error, success) => {
                 return prompt()
             }
 
-            success(result)
-        } else error(err)
+            cb(null, result)
+        } else cb(err)
     })
 }
 
-export { logger as default, logger }
+export { logger as default, logger, prompt }

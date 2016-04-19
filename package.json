@@ -36,7 +36,7 @@
   "author": "Julien Vincent",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/julienvincent/simple-cli/issues"
+    "url": "https://github.com/julienvincent/cli-core/issues"
   },
-  "homepage": "https://github.com/julienvincent/simple-cli#readme"
+  "homepage": "https://github.com/julienvincent/cli-core#readme"
 }

@@ -1,4 +1,4 @@
-import { init, define, command, option, flags } from '../src/index'
+import { init, define, command, option, flags, prompt } from '../src/index'
 
 define(
     command(
@@ -7,6 +7,8 @@ define(
         (ok) => {
             console.log(ok)
             if (option('french')) return "Bonjour!"
+
+            prompt('ok', (err, res) => console.log(res))
 
             return "Hi!"
         }
