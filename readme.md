@@ -27,8 +27,9 @@ flags([
 init()
 ```
 
-`$ node demo.js`
 ```
+$ node demo.js
+$
 Simple-cli help text
 
 Available commands:
@@ -40,8 +41,10 @@ Available flags:
  --french  Say hello in french
 ```
 
-`$ node demo.js say-hello`
-`$ Hi!`
+```
+$ node demo.js say-hello
+$ Hi!
+```
 
 `$ node demo.js say-hello --french`
 `$ Bonjour!`
