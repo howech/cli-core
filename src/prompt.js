@@ -76,27 +76,8 @@ const prompt = (label, opts, cb) => {
                 fs.writeFileSync(_path, `${HIST.join('\n')}\n`);
             }
         }
-        let formattedLabel = `\x1b[1m\x1b[31m(\x1b[32m${_label}\x1b[31m)\x1b[0m `
-        let labelLength = _label.length + 3
-
-        try {
-            const currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString('utf8').replace('\n', '')
-            if (!label) {
-                formattedLabel += `\x1b[1m\x1b[36m${currentBranch}\x1b[0m `
-                labelLength += currentBranch.length + 1
-            }
-
-            try {
-                execSync('[[ -z $(git status -s) ]]')
-            } catch (e) {
-                if (!label) {
-                    formattedLabel += '\x1b[1m\x1b[33m✗\x1b[0m '
-                    labelLength += 2
-                }
-            }
-        } catch (e) {
-            // ignore
-        }
+        let formattedLabel = `${_label}\x1b[0m `
+        let labelLength = _label.length + 1
 
         const fd = fs.openSync('/dev/tty', 'rs')
 
