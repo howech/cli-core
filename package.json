@@ -1,6 +1,6 @@
 {
   "name": "cli-core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A tool for building really simple cli tools",
   "main": "lib/index.js",
   "dependencies": {
